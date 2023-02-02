@@ -59,16 +59,21 @@ class EC2:
                         http_endpoint = None
                         public_dns = None
                         public_ip = None
+                        private_ip = None
                         instance_profile = None
                         if "MetadataOptions" in instance:
                             http_tokens = instance["MetadataOptions"]["HttpTokens"]
-                            http_endpoint = instance["MetadataOptions"]["HttpEndpoint"]
+                            http_endpoint = instance["MetadataOptions"][
+                                "HttpEndpoint"
+                            ]
                         if (
                             "PublicDnsName" in instance
                             and "PublicIpAddress" in instance
                         ):
                             public_dns = instance["PublicDnsName"]
                             public_ip = instance["PublicIpAddress"]
+                        if "PrivateIpAddress" in instance:
+                            private_ip = instance["PrivateIpAddress"]
                         if "IamInstanceProfile" in instance:
                             instance_profile = instance["IamInstanceProfile"]
 
@@ -82,7 +87,7 @@ class EC2:
                                 instance["ImageId"],
                                 instance["LaunchTime"],
                                 instance["PrivateDnsName"],
-                                instance["PrivateIpAddress"],
+                                private_ip,
                                 public_dns,
                                 public_ip,
                                 http_tokens,
